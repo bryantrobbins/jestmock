@@ -1,0 +1,14 @@
+{
+  "name": "jestmock",
+  "version": "1.0.0",
+  "description": "Trying to understand mocking of dependencies in jest",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "SEE LICENSE IN LICENSE",
+  "devDependencies": {
+    "jest": "^23.6.0"
+  }
+}
