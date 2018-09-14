@@ -18,7 +18,10 @@ mocked dependencies
 
 # The approach
 
-It was not obvious to me from Jest examples, but the ```jest.mock``` function supports a second argument which is a custom factory for the mock.
+It was not obvious to me from Jest examples, but the ```jest.mock``` function 
+supports a second argument which is a custom factory for the mock. You can find
+the complete documentation for the mock function
+[here](https://jestjs.io/docs/en/jest-object#jestmockmodulename-factory-options).
 
 Also, I used ```jest.resetModules()``` to reset mocks within each test. I haven't
 tried moving mock resetting to the before/after methods.
