@@ -1,10 +1,5 @@
 describe('mocking tests', function () {
 
-    beforeEach(() => {
-    });
-    afterEach(() => {
-    });
-
     it('should correctly mock a dependent module', async () => {
         // Mock the dependent module, "dependonme"
         jest.resetModules();

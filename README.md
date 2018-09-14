@@ -2,51 +2,49 @@
 
 I am trying to understand how to mock a required "transitive dependency" using jest.
 
-For the sake of demonstration, I've created a project with a single Jest test in test.js. You can run the test with ```npm run test```.
+For the sake of demonstration, I've created a project which now has three
+tests in a file test.js. You can run the tests from this repo with 
+```npm runtest```.
 
-The test loads a module "testme", which has a require at its top level for a module "dependonme". The "dependonme" module throws an error when loaded.
+# Requirements
 
-# Question
+I want to be able to mock a transitive dependency of a module under test by:
+* Adding test-specific mock configuration to a jest ```it``` test (not, e.g., by putting Jest "manual mocks" in a ```__mocks__``` folder)
+* Overriding the implementation of the module entirely
+* Overriding the implementation of exported functions of the module individually
+* Overriding the implementation of exported functions in a module which exports an initializer function
+* Have multiple tests in the same file, with independent control over the same
+mocked dependencies
 
-How can I mock the "dependonme" module while trying to test the "testme" module? Here is my current (failing) attempt in test.js:
+# The approach
+
+It was not obvious to me from Jest examples, but the ```jest.mock``` function supports a second argument which is a custom factory for the mock.
+
+Also, I used ```jest.resetModules()``` to reset mocks within each test. I haven't
+tried moving mock resetting to the before/after methods.
+
+One more trick: name any variables holding jest mocks "mock*". This is a Jest 
+behavior related to mock initialization.
+
+# Quick Examples
 
 ```
-jest.mock('./src/dependonme');
-var testme = require('./src/testme');
-testme.callme_a();
-```
+        // Mock the whole module
+        jest.mock("./src/dependonme", () => {});
 
-It fails to mock, and loads the real "dependonme" module instead. Here is the output:
+        // Mock a function within a module
+        jest.mock("./src/dependonme_functions", () => {
+            return {
+                woot: mockWoot
+            }
+        });        
 
-```
-$ npm run test
-
-> jestmock@1.0.0 test /home/bryan/public-code/jestmock
-> jest
-
- FAIL  ./test.js
-  mocking tests
-    ✕ should correctly mock a dependent module (22ms)
-
-  ● mocking tests › should correctly mock a dependent module
-
-    Failed: "Do no load this module"
-
-       7 |     });
-       8 |   
-    >  9 |     it('should correctly mock a dependent module', async () => {
-         |     ^
-      10 |         jest.mock('./src/dependonme');
-      11 |         var testme = require('./src/testme');
-      12 |         testme.callme_a();
-
-      at Env.it (node_modules/jest-jasmine2/build/jasmine_async.js:102:24)
-      at Suite.it (test.js:9:5)
-      at Object.<anonymous> (test.js:1:27)
-
-Test Suites: 1 failed, 1 total
-Tests:       1 failed, 1 total
-Snapshots:   0 total
-Time:        1.442s
-Ran all test suites.
+        // Mock a module which exports a function
+        jest.mock("./src/dependonme_functions_options", () => {
+            return function() {
+                return {
+                    woot: mockWoot
+                }
+            }
+        });
 ```
