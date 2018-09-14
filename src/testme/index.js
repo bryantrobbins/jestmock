@@ -14,8 +14,6 @@ function callme_c() {
   dependonme_functions_options.woot();
 }
 
-
-
 module.exports = {
     callme_a,
     callme_b,

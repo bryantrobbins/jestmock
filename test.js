@@ -40,11 +40,6 @@ describe('mocking tests', function () {
 
         jest.resetModules();
         jest.mock("./src/dependonme", () => {});
-        jest.mock("./src/dependonme_functions", () => {
-            return {
-                woot: mockWoot
-            }
-        });
         jest.mock("./src/dependonme_functions_options", () => {
             return function() {
                 return {                
@@ -56,9 +51,5 @@ describe('mocking tests', function () {
         var testme = require('./src/testme');
         testme.callme_c();
     });
-
-
-
-  
   
   });
