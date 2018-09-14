@@ -31,11 +31,15 @@ behavior related to mock initialization.
 
 # Quick Examples
 
+
+
 ```
         // Mock the whole module
         jest.mock("./src/dependonme", () => {});
 
         // Mock a function within a module
+        // Here, mockWoot can be initialized to jest.fn() elsewhere,
+        // so that you can verify its behavior afterward.
         jest.mock("./src/dependonme_functions", () => {
             return {
                 woot: mockWoot
